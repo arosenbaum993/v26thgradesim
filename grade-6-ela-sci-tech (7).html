@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 6 ELA | Paired Texts: Science & Technology | Georgia Milestones</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1a3a5c; --gold:#c8973a; --gold-light:#f0d28a;
+  --green:#1a7a4a; --blue:#2563a8; --purple:#6d28d9; --teal:#0891b2;
+  --gray-100:#f4f6f9; --gray-200:#e2e8f0; --gray-400:#94a3b8;
+  --gray-700:#334155; --white:#ffffff; --passage-bg:#fefdf8; --passage-border:#d4c89a;
+  --header-h:66px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray-100);color:var(--gray-700);}
+
+.sim-header{background:var(--navy);border-bottom:4px solid var(--gold);position:sticky;top:0;z-index:100;}
+.header-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.header-title{font-family:'Libre Baskerville',serif;font-size:1.05rem;font-weight:700;color:white;line-height:1.3;}
+.header-title span{display:block;font-size:.72rem;font-weight:400;font-family:'DM Sans',sans-serif;color:var(--gold-light);letter-spacing:.06em;text-transform:uppercase;}
+.progress-wrap{display:flex;align-items:center;gap:10px;}
+.progress-bar-outer{width:160px;height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden;}
+.progress-bar-inner{height:100%;background:var(--gold);border-radius:4px;transition:width .4s ease;width:0%;}
+#progress-label{color:var(--gold-light);font-size:.78rem;white-space:nowrap;}
+
+.screen{display:none;}
+.screen.active{display:block;}
+
+#screen-intro{max-width:620px;margin:60px auto;padding:0 20px;}
+.intro-card{background:white;border-radius:12px;border:1px solid var(--gray-200);box-shadow:0 4px 24px rgba(0,0,0,.08);overflow:hidden;}
+.intro-hero{background:var(--navy);padding:32px 36px 28px;color:white;}
+.intro-hero h1{font-family:'Libre Baskerville',serif;font-size:1.5rem;line-height:1.35;margin-bottom:6px;}
+.intro-hero p{font-size:.85rem;color:var(--gold-light);letter-spacing:.04em;text-transform:uppercase;}
+.intro-body{padding:32px 36px;}
+.intro-body h2{font-family:'Libre Baskerville',serif;font-size:1rem;color:var(--navy);margin-bottom:16px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
+.info-chip{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:8px;padding:12px 14px;font-size:.82rem;}
+.info-chip strong{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:3px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:6px;}
+.form-group input,.form-group select{width:100%;padding:11px 14px;border:2px solid var(--gray-200);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--gray-700);background:white;transition:border-color .2s;outline:none;}
+.form-group input:focus,.form-group select:focus{border-color:var(--navy);}
+.btn-start{width:100%;padding:14px;background:var(--navy);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s;}
+.btn-start:hover{background:#0f2540;}
+.vocab-note{margin-top:16px;padding:12px 14px;background:#fff8e6;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:.8rem;line-height:1.5;color:#5a4010;}
+
+#screen-sim.active{display:block;}
+.sim-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;height:calc(100vh - var(--header-h) - 70px);overflow:hidden;max-width:1100px;margin:0 auto;}
+.passage-panel{background:var(--passage-bg);border-right:1px solid var(--passage-border);padding:28px;overflow-y:auto;height:100%;}
+.passage-panel::-webkit-scrollbar{width:5px;}
+.passage-panel::-webkit-scrollbar-thumb{background:var(--passage-border);border-radius:4px;}
+#questions-container{overflow-y:auto;height:100%;padding:24px 20px 100px;}
+.passage-label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:10px;}
+.passage-title{font-family:'Libre Baskerville',serif;font-size:1.05rem;color:var(--navy);margin-bottom:6px;line-height:1.3;}
+.source-tag{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:white;background:var(--navy);padding:2px 8px;border-radius:10px;margin-bottom:12px;}
+.passage-text{font-size:.87rem;line-height:1.75;color:#333;}
+.passage-text p{margin-bottom:12px;}
+.passage-divider{border:none;border-top:2px dashed var(--passage-border);margin:18px 0;}
+
+.question-block{background:white;border:1px solid var(--gray-200);border-radius:10px;padding:22px 24px;margin-bottom:16px;transition:box-shadow .2s;}
+.question-block:hover{box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.question-block.answered{border-left:4px solid var(--navy);}
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.q-num{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--navy);background:var(--gray-100);padding:2px 8px;border-radius:10px;}
+.q-domain{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:white;padding:2px 8px;border-radius:10px;}
+.domain-ri{background:#0891b2;} .domain-w{background:#d97706;} .domain-lang{background:#059669;}
+.q-dok{font-size:.66rem;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-left:auto;}
+.q-stem{font-size:.9rem;line-height:1.55;color:var(--gray-700);margin-bottom:14px;font-weight:500;}
+
+.options-list{list-style:none;}
+.options-list li{margin-bottom:8px;}
+.option-btn{width:100%;text-align:left;padding:10px 14px;border:2px solid var(--gray-200);border-radius:8px;background:white;font-family:'DM Sans',sans-serif;font-size:.87rem;color:var(--gray-700);cursor:pointer;line-height:1.45;transition:border-color .15s,background .15s;display:flex;align-items:flex-start;gap:10px;}
+.option-btn:hover{border-color:var(--navy);background:var(--gray-100);}
+.option-btn.selected{border-color:var(--navy);background:#eef3fb;}
+.opt-letter{font-weight:700;font-size:.78rem;min-width:20px;height:20px;border-radius:50%;background:var(--gray-200);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.option-btn.selected .opt-letter{background:var(--navy);color:white;}
+
+.multiselect-note{font-size:.75rem;color:var(--blue);font-weight:600;margin-bottom:10px;padding:6px 10px;background:#eff6ff;border-radius:6px;border-left:3px solid var(--blue);}
+.option-check{width:100%;text-align:left;padding:9px 14px;border:2px solid var(--gray-200);border-radius:8px;background:white;font-family:'DM Sans',sans-serif;font-size:.87rem;color:var(--gray-700);cursor:pointer;line-height:1.45;transition:all .15s;display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.option-check:hover{border-color:var(--navy);}
+.option-check.checked{border-color:var(--navy);background:#eef3fb;}
+.check-box{width:18px;height:18px;border:2px solid var(--gray-400);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;}
+.option-check.checked .check-box{border-color:var(--navy);background:var(--navy);color:white;}
+
+.inline-sentence{font-size:.9rem;line-height:1.7;color:var(--gray-700);margin-bottom:10px;}
+.inline-dropdown{display:inline-block;position:relative;}
+.inline-dropdown select{appearance:none;-webkit-appearance:none;padding:4px 28px 4px 10px;border:2px solid var(--navy);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--navy);background:#eef3fb;cursor:pointer;outline:none;min-width:200px;}
+.inline-dropdown::after{content:"▾";position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--navy);font-size:.8rem;}
+
+.match-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:6px;}
+.match-table th{background:var(--navy);color:white;padding:9px 10px;text-align:center;font-weight:600;font-size:.76rem;border:1px solid #2a4a6c;}
+.match-table th:first-child{text-align:left;min-width:180px;}
+.match-table td{padding:9px 10px;border:1px solid var(--gray-200);vertical-align:middle;}
+.match-table td:first-child{font-size:.84rem;color:var(--gray-700);background:var(--gray-100);}
+.match-table td:not(:first-child){text-align:center;}
+.match-table tr:nth-child(even) td{background:white;}
+.match-table tr:nth-child(odd) td{background:#fafbfc;}
+.match-table tr:nth-child(even) td:first-child{background:var(--gray-100);}
+.match-radio{width:18px;height:18px;cursor:pointer;accent-color:var(--navy);}
+.match-table tr.row-answered td:first-child{font-weight:600;color:var(--navy);}
+
+.drag-bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.drag-item{padding:7px 14px;background:var(--navy);color:white;border-radius:20px;font-size:.82rem;cursor:grab;user-select:none;transition:transform .15s,opacity .15s;}
+.drag-item:active{cursor:grabbing;transform:scale(1.05);}
+.drag-item.placed{opacity:.35;pointer-events:none;}
+.drop-slots-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+.drop-slot-wrap .slot-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:4px;display:block;}
+.drop-slot{min-height:36px;border:2px dashed var(--gray-400);border-radius:6px;padding:5px 10px;font-size:.82rem;color:var(--gray-400);background:var(--gray-100);transition:all .15s;display:flex;align-items:center;}
+.drop-slot.filled{border-style:solid;border-color:var(--navy);background:white;color:var(--gray-700);}
+.drop-slot.drag-over{border-color:var(--blue);background:#eff6ff;}
+
+.q-actions{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--gray-100);}
+.btn-vocab-flag{padding:7px 14px;border:2px solid var(--gold);background:white;color:#7a5a00;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.btn-vocab-flag:hover{background:#fff8e6;}
+.btn-vocab-flag.flagged{background:#fff8e6;border-color:#b8860b;}
+.answered-check{font-size:.78rem;color:var(--navy);font-weight:600;margin-left:auto;opacity:0;}
+.question-block.answered .answered-check{opacity:1;}
+
+/* NAV BAR */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:white;border-top:2px solid var(--gray-200);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;z-index:100;box-shadow:0 -4px 16px rgba(0,0,0,.08);gap:12px;}
+.nav-left{display:flex;align-items:center;gap:10px;}
+.nav-center{font-size:.84rem;color:var(--gray-400);text-align:center;flex:1;}
+.nav-center strong{color:var(--navy);}
+.btn-nav{padding:11px 24px;border:2px solid var(--navy);background:white;color:var(--navy);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-nav:hover:not(:disabled){background:var(--navy);color:white;}
+.btn-nav:disabled{border-color:var(--gray-200);color:var(--gray-400);cursor:default;}
+.btn-next{padding:11px 28px;background:var(--navy);color:white;border:2px solid var(--navy);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.btn-next:hover:not(:disabled){background:#0f2540;}
+.btn-next:disabled{background:var(--gray-400);border-color:var(--gray-400);cursor:default;}
+.btn-finish{padding:11px 28px;background:var(--green);color:white;border:2px solid var(--green);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s;}
+.btn-finish:hover:not(:disabled){background:#125e38;}
+.btn-finish:disabled{background:var(--gray-400);border-color:var(--gray-400);cursor:default;}
+/* lock styling removed - answers changeable until submit */
+/* single question layout — questions container no longer needs bottom padding for bar */
+#questions-container{overflow-y:auto;height:calc(100% - 70px);padding:24px 20px 24px;}
+
+#screen-results{max-width:760px;margin:40px auto;padding:0 20px 60px;}
+.results-hero{background:var(--navy);border-radius:12px 12px 0 0;padding:32px 36px;color:white;text-align:center;border-bottom:4px solid var(--gold);}
+.results-hero h2{font-family:'Libre Baskerville',serif;font-size:1.5rem;margin-bottom:4px;}
+.student-name-result{font-size:1rem;color:var(--gold-light);margin-bottom:24px;}
+.score-circle{width:130px;height:130px;border-radius:50%;border:6px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;background:rgba(255,255,255,.08);}
+.score-pct{font-size:2.2rem;font-weight:700;line-height:1;}
+.score-raw{font-size:.8rem;color:var(--gold-light);margin-top:4px;}
+.achievement-badge{display:inline-block;padding:6px 20px;border-radius:20px;font-size:.9rem;font-weight:700;letter-spacing:.04em;}
+.badge-distinguished{background:#1a8c4e;color:white;} .badge-proficient{background:#2e7bbf;color:white;}
+.badge-developing{background:#e0a800;color:#000;} .badge-beginning{background:#c0392b;color:white;}
+.results-body{background:white;border:1px solid var(--gray-200);border-top:none;border-radius:0 0 12px 12px;padding:32px 36px;}
+.results-section{margin-bottom:28px;}
+.results-section h3{font-family:'Libre Baskerville',serif;font-size:1rem;color:var(--navy);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--gray-200);}
+.domain-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.domain-card{background:var(--gray-100);border-radius:8px;padding:14px 16px;}
+.domain-card .d-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin-bottom:8px;}
+.domain-bar-outer{height:8px;background:var(--gray-200);border-radius:4px;overflow:hidden;margin-bottom:6px;}
+.domain-bar-inner{height:100%;border-radius:4px;}
+.domain-card .d-score{font-size:.8rem;color:var(--gray-700);}
+.dok-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:.85rem;}
+.dok-label{width:60px;font-weight:600;color:var(--navy);flex-shrink:0;}
+.dok-bar-outer{flex:1;height:10px;background:var(--gray-200);border-radius:5px;overflow:hidden;}
+.dok-bar-inner{height:100%;border-radius:5px;background:var(--navy);}
+.dok-score{width:55px;text-align:right;color:var(--gray-400);flex-shrink:0;}
+.vocab-flags-list{display:flex;flex-wrap:wrap;gap:8px;}
+.vocab-flag-chip{padding:5px 12px;background:#fff8e6;border:1px solid var(--gold);border-radius:16px;font-size:.8rem;color:#7a5a00;}
+.no-flags{font-size:.85rem;color:var(--gray-400);font-style:italic;}
+.results-note{padding:14px 16px;background:#fff8e6;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:.82rem;line-height:1.6;color:#5a4010;margin-top:16px;}
+.submit-msg{padding:12px 16px;border-radius:8px;font-size:.84rem;margin-top:20px;text-align:center;}
+.submit-msg.success{background:#e8f7ee;color:#155a35;border:1px solid #a8d5bb;}
+.submit-msg.error{background:#fdecea;color:#7a1f1f;border:1px solid #f5b3ae;}
+.submit-msg.sending{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe;}
+
+@media(max-width:768px){
+  .sim-layout{grid-template-columns:1fr;height:auto;overflow:visible;}
+  .passage-panel{height:50vh;border-right:none;border-bottom:1px solid var(--passage-border);border-radius:10px 10px 0 0;}
+  #questions-container{height:auto;overflow:visible;padding:16px 12px 140px;}
+  .domain-grid{grid-template-columns:1fr;}
+  .info-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header class="sim-header">
+  <div class="header-inner">
+    <div class="header-title">
+      <span>Georgia Milestones EOG Practice</span>
+      Grade 6 ELA · Paired Texts: Science &amp; Technology
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-bar"></div></div>
+      <span id="progress-label">0 / 25</span>
+    </div>
+  </div>
+</header>
+
+<!-- INTRO -->
+<div id="screen-intro" class="screen active">
+  <div style="max-width:620px;margin:60px auto;padding:0 20px;">
+    <div class="intro-card">
+      <div class="intro-hero">
+        <h1>Science &amp; Technology<br>Paired Texts Practice</h1>
+        <p>Grade 6 · Georgia Milestones EOG Format</p>
+      </div>
+      <div class="intro-body">
+        <h2>About This Practice</h2>
+        <div class="info-grid">
+          <div class="info-chip"><strong>Questions</strong>25 items</div>
+          <div class="info-chip"><strong>Format</strong>Selected Response, Multi-Select, Dropdown, Matching, Drag &amp; Drop</div>
+          <div class="info-chip"><strong>Topic</strong>Paired Informational Texts — Space Exploration &amp; Artificial Intelligence</div>
+          <div class="info-chip"><strong>Standards</strong>6.RI.CT.1–3, 6.W.AW.1, 6.L.V.1, 6.L.V.3, 6.L.GC.2</div>
+        </div>
+        <div class="form-group">
+          <label for="student-name">Your Full Name</label>
+          <input type="text" id="student-name" placeholder="First Last" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="student-period">Class Period</label>
+          <select id="student-period">
+            <option value="">— Select Period —</option>
+            <option>1st</option><option>2nd</option><option>3rd</option>
+            <option>4th</option><option>5th</option><option>6th</option><option>7th</option>
+          </select>
+        </div>
+        <button class="btn-start" onclick="startSim()">Begin Practice →</button>
+        <div class="vocab-note">🏳 <strong>Vocabulary Flag:</strong> If a question is hard because of a word you don't know, tap the flag. Your teacher uses this to plan vocabulary lessons.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIM -->
+<div id="screen-sim" class="screen">
+  <div class="sim-layout">
+    <div class="passage-panel">
+      <div class="passage-label">📄 Read Both Sources — Then Answer the Questions</div>
+
+      <div class="passage-title">Source 1: "How Artificial Intelligence Works"</div>
+      <span class="source-tag">Informational Text</span>
+      <div class="passage-text">
+        <p>Artificial intelligence — often shortened to AI — refers to computer systems that can perform tasks that normally require human thinking. These tasks include recognizing speech, identifying images, translating languages, and making decisions based on patterns in data.</p>
+        <p>At the heart of most modern AI is a process called <em>machine learning</em>. Instead of being programmed with every rule it needs to follow, a machine-learning system is trained on large amounts of data. For example, to teach an AI to recognize photos of cats, engineers feed it thousands of images labeled "cat" and "not a cat." Over time, the system learns to detect patterns — such as pointy ears, whiskers, and fur — and applies those patterns to new images it has never seen before.</p>
+        <p>A more advanced form of machine learning, called <em>deep learning</em>, uses layers of interconnected mathematical models called neural networks. These networks are loosely inspired by the human brain, which processes information through billions of connected nerve cells. Deep learning has made it possible for AI systems to perform remarkably complex tasks, such as diagnosing diseases from medical scans, generating realistic images, and holding conversations in natural language.</p>
+        <p>AI is already part of everyday life in ways many people don't notice. When a streaming service recommends a show you might like, that is AI analyzing your viewing habits. When a navigation app reroutes your drive around traffic, that is AI processing real-time data. Spam filters, voice assistants, and even the autocorrect on your phone all rely on forms of artificial intelligence.</p>
+        <p>Despite its rapid growth, AI has limitations. It can reflect the biases present in its training data, produce errors when faced with situations far outside its training, and raise serious questions about privacy, jobs, and the ethical use of technology. Scientists, engineers, policymakers, and the public are all working to understand both the promise and the risks of this powerful technology.</p>
+      </div>
+
+      <hr class="passage-divider">
+
+      <div class="passage-title">Source 2: "The Space Race and the Technology It Left Behind"</div>
+      <span class="source-tag">Informational Text</span>
+      <div class="passage-text">
+        <p>In the 1950s and 1960s, the United States and the Soviet Union were locked in a fierce competition known as the Space Race. Each nation poured enormous resources into developing rockets, satellites, and spacecraft, driven partly by national pride and partly by the belief that whoever controlled space would gain a strategic advantage in the Cold War.</p>
+        <p>The race produced remarkable milestones. In 1957, the Soviet Union launched Sputnik, the world's first artificial satellite. Four years later, cosmonaut Yuri Gagarin became the first human to orbit Earth. The United States responded with its own program, culminating in the Apollo 11 mission of 1969, when astronauts Neil Armstrong and Buzz Aldrin became the first humans to walk on the Moon.</p>
+        <p>What is less well known is how profoundly the Space Race transformed everyday life. Engineers working on NASA projects needed to solve difficult problems — how to build equipment small enough to fit inside a spacecraft, how to keep astronauts safe from extreme temperatures and radiation, and how to communicate across vast distances in space. The solutions they invented spilled over into civilian technology in unexpected ways.</p>
+        <p>Memory foam, originally developed to protect pilots and astronauts from high-speed impacts, is now found in mattresses and sports helmets. Water filtration technology created for long space missions is used today in portable water purifiers. Scratch-resistant lenses in eyeglasses were adapted from coatings developed for NASA helmet visors. Even the technology behind wireless headsets, GPS navigation, and certain medical imaging tools traces its roots to the space program.</p>
+        <p>Today, space exploration continues — through Mars rovers, the James Webb Space Telescope, and growing commercial spaceflight industries. Scientists argue that the next wave of space research will again push the limits of engineering, materials science, and computing, generating innovations we cannot yet predict. As it was in the 1960s, the challenges of going beyond Earth continue to drive technology forward here at home.</p>
+      </div>
+    </div>
+
+    <div id="questions-container"></div>
+  </div>
+
+  <div class="nav-bar" id="nav-bar">
+    <div class="nav-left">
+      <button class="btn-nav" id="btn-back" onclick="goBack()" disabled>← Back</button>
+    </div>
+    <div class="nav-center">Question <strong id="nav-current">1</strong> of <strong>25</strong></div>
+    <button class="btn-next" id="btn-next" onclick="goNext()" disabled>Next →</button>
+    <button class="btn-finish" id="btn-finish" onclick="finishSim()" style="display:none">Submit &amp; See Results →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="results-hero">
+    <h2>Practice Complete!</h2>
+    <div class="student-name-result" id="result-name"></div>
+    <div class="score-circle">
+      <div class="score-pct" id="result-pct">--</div>
+      <div class="score-raw" id="result-raw">-- / --</div>
+    </div>
+    <div id="result-badge"></div>
+  </div>
+  <div class="results-body">
+    <div class="results-section"><h3>Performance by Domain</h3><div class="domain-grid" id="domain-grid"></div></div>
+    <div class="results-section"><h3>Performance by DOK Level</h3><div id="dok-breakdown"></div></div>
+    <div class="results-section"><h3>🚩 Vocabulary Flags</h3><div id="vocab-flag-summary"></div></div>
+    <div id="submit-msg" class="submit-msg sending">Sending results to your teacher…</div>
+    <div class="results-note"><strong>What's next?</strong> Review any missed questions. Pay attention to vocabulary flags — those words will appear on the real EOG.</div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzv9FEf4U77RRY52rzANtUNK0FC2P0lca6aWldraXQCfSH0oLMVev-6uSp47wH6fEpa/exec";
+const TOTAL_QUESTIONS = 25;
+
+const QUESTIONS = [
+  // ── DOK 1 ── 6 items ──────────────────────────────────────────────────
+  {id:"Q1",dok:1,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"According to Source 1, what is <strong>machine learning</strong>?",
+   options:[
+     {text:"A process by which computers are programmed with every rule they need to follow",correct:false},
+     {text:"A process by which a computer system is trained on large amounts of data to detect patterns",correct:true},
+     {text:"A type of software that controls the physical parts of a computer",correct:false},
+     {text:"A system that stores and retrieves data from the internet",correct:false}
+   ],
+   vocabTerm:"machine learning — a type of AI that learns from data rather than following fixed rules"},
+
+  {id:"Q2",dok:1,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"According to Source 2, what event marked the <strong>first time humans walked on the Moon</strong>?",
+   options:[
+     {text:"The launch of Sputnik in 1957",correct:false},
+     {text:"Yuri Gagarin's orbit of Earth in 1961",correct:false},
+     {text:"The Apollo 11 mission in 1969",correct:true},
+     {text:"The James Webb Space Telescope launch",correct:false}
+   ],
+   vocabTerm:"milestone — an important event or achievement that marks a significant point in progress"},
+
+  {id:"Q3",dok:1,domain:"lang",domainLabel:"Language & Vocab",domainClass:"domain-lang",type:"sr",
+   stem:"In Source 1, the word <strong>\"biases\"</strong> most likely means:",
+   options:[
+     {text:"Errors caused by a weak internet connection",correct:false},
+     {text:"Unfair preferences or prejudices built into a system",correct:true},
+     {text:"Complex mathematical calculations",correct:false},
+     {text:"Features that make AI more efficient",correct:false}
+   ],
+   vocabTerm:"bias — an unfair tendency to favor or disfavor something, often built into data or systems"},
+
+  {id:"Q4",dok:1,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"Which detail from Source 2 supports the idea that space technology has changed everyday life?",
+   options:[
+     {text:"The Soviet Union and United States competed during the Cold War.",correct:false},
+     {text:"Yuri Gagarin became the first human to orbit Earth.",correct:false},
+     {text:"Memory foam, originally developed for astronaut safety, is now found in mattresses.",correct:true},
+     {text:"Scientists are now exploring Mars and launching commercial spacecraft.",correct:false}
+   ],
+   vocabTerm:"supporting detail — a specific fact or example that backs up a central idea"},
+
+  {id:"Q5",dok:1,domain:"lang",domainLabel:"Language & Vocab",domainClass:"domain-lang",type:"sr",
+   stem:"In Source 2, the word <strong>\"culminating\"</strong> most nearly means:",
+   options:[
+     {text:"Beginning",correct:false},
+     {text:"Failing",correct:false},
+     {text:"Reaching the highest point",correct:true},
+     {text:"Repeating",correct:false}
+   ],
+   vocabTerm:"culminating — reaching the highest or final point of something"},
+
+  {id:"Q6",dok:1,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"Which sentence states the <strong>central idea</strong> of Source 1?",
+   options:[
+     {text:"Deep learning uses layers of interconnected mathematical models called neural networks.",correct:false},
+     {text:"Artificial intelligence refers to computer systems that can perform tasks that normally require human thinking.",correct:true},
+     {text:"Spam filters, voice assistants, and autocorrect all rely on forms of artificial intelligence.",correct:false},
+     {text:"AI can reflect the biases present in its training data.",correct:false}
+   ],
+   vocabTerm:"central idea — the most important point an author makes about a topic in an informational text"},
+
+  // ── DOK 2 ── 13 items ─────────────────────────────────────────────────
+  {id:"Q7",dok:2,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"In Source 1, the author compares neural networks to the human brain. What is the <strong>purpose</strong> of this comparison?",
+   options:[
+     {text:"To prove that AI is smarter than humans",correct:false},
+     {text:"To help readers understand a complex technical concept by connecting it to something familiar",correct:true},
+     {text:"To warn readers that AI will replace human workers",correct:false},
+     {text:"To explain how the human brain was designed by engineers",correct:false}
+   ],
+   vocabTerm:"analogy — a comparison between two things to explain or clarify an idea"},
+
+  {id:"Q8",dok:2,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"How does the author of Source 2 <strong>develop the central idea</strong> that space exploration drives technological progress?",
+   options:[
+     {text:"By listing the names of all astronauts who have traveled to space",correct:false},
+     {text:"By explaining the political causes of the Cold War in detail",correct:false},
+     {text:"By providing specific examples of NASA inventions that are now used in everyday life",correct:true},
+     {text:"By comparing the budgets of the US and Soviet space programs",correct:false}
+   ],
+   vocabTerm:"text development — how an author builds and supports a central idea using details and examples"},
+
+  {id:"Q9",dok:2,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"Read this sentence from Source 1:<br><br><em>\"These networks are loosely inspired by the human brain, which processes information through billions of connected nerve cells.\"</em><br><br>The word <strong>\"loosely\"</strong> suggests that the comparison between neural networks and the human brain is:",
+   options:[
+     {text:"Exact and precise",correct:false},
+     {text:"General rather than a perfect match",correct:true},
+     {text:"Incorrect and misleading",correct:false},
+     {text:"Based on new scientific research",correct:false}
+   ],
+   vocabTerm:"context clues — words around an unfamiliar word that help reveal its meaning"},
+
+  {id:"Q10",dok:2,domain:"lang",domainLabel:"Language & Vocab",domainClass:"domain-lang",type:"sr",
+   stem:"In Source 2, the phrase <strong>\"spilled over into civilian technology\"</strong> means that NASA inventions:",
+   options:[
+     {text:"Were accidentally destroyed during testing",correct:false},
+     {text:"Were kept secret from the general public",correct:false},
+     {text:"Spread beyond their original purpose into everyday use",correct:true},
+     {text:"Caused problems for ordinary citizens",correct:false}
+   ],
+   vocabTerm:"figurative language — words used to create an image or make a comparison, not meant literally"},
+
+  {id:"Q11",dok:2,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"What is the <strong>main purpose</strong> of the final paragraph of Source 2?",
+   options:[
+     {text:"To summarize the history of the Cold War",correct:false},
+     {text:"To argue that space exploration is too expensive",correct:false},
+     {text:"To suggest that future space research will continue to produce new technology",correct:true},
+     {text:"To describe the failures of past space missions",correct:false}
+   ],
+   vocabTerm:"author's purpose — the reason an author wrote a text: to inform, persuade, or entertain"},
+
+  {id:"Q12",dok:2,domain:"w",domainLabel:"Writing",domainClass:"domain-w",type:"sr",
+   stem:"A student writes this claim for an argumentative essay using both sources:<br><br><em>\"Both artificial intelligence and space exploration show that challenging problems push humans to develop powerful new technologies.\"</em><br><br>Which piece of evidence from the sources <strong>best</strong> supports this claim?",
+   options:[
+     {text:"Yuri Gagarin orbited Earth in 1961.",correct:false},
+     {text:"AI can reflect biases in its training data.",correct:false},
+     {text:"NASA engineers solving problems for space missions invented scratch-resistant lenses and water filtration systems now used on Earth.",correct:true},
+     {text:"Voice assistants and spam filters rely on forms of AI.",correct:false}
+   ],
+   vocabTerm:"relevant evidence — details that directly connect to and support a specific claim"},
+
+  {id:"Q13",dok:2,domain:"w",domainLabel:"Writing",domainClass:"domain-w",type:"dropdown",
+   stem:"Complete the sentence using the word that best fits the context:",
+   prefix:"The author of Source 1 uses specific examples such as streaming recommendations and navigation apps to",
+   options:[
+     {text:"illustrate how AI already affects daily life.",correct:true},
+     {text:"prove that AI is more powerful than human intelligence.",correct:false},
+     {text:"warn readers about the dangers of using technology.",correct:false},
+     {text:"describe the history of the internet.",correct:false}
+   ],
+   vocabTerm:"author's purpose — the reason a writer includes specific details or examples in a text"},
+
+  {id:"Q14",dok:2,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"Both Source 1 and Source 2 discuss technology that <strong>started with one purpose and ended up serving another</strong>. Which example from Source 1 best parallels the Space Race inventions described in Source 2?",
+   options:[
+     {text:"Deep learning uses neural networks loosely inspired by the brain.",correct:false},
+     {text:"AI was originally designed for military use.",correct:false},
+     {text:"Machine learning systems trained on images can now recognize patterns in new photos.",correct:false},
+     {text:"AI developed for complex tasks like diagnosing diseases is now used in everyday tools like spam filters.",correct:true}
+   ],
+   vocabTerm:"synthesis — combining ideas from more than one source to draw a conclusion"},
+
+  {id:"Q15",dok:2,domain:"lang",domainLabel:"Language & Vocab",domainClass:"domain-lang",type:"sr",
+   stem:"The word <strong>\"ethical\"</strong> in Source 1 refers to questions about:",
+   options:[
+     {text:"The cost of developing new technology",correct:false},
+     {text:"Whether something is right, fair, and responsible",correct:true},
+     {text:"The speed at which computers process data",correct:false},
+     {text:"The mathematical accuracy of AI predictions",correct:false}
+   ],
+   vocabTerm:"ethical — relating to questions of right, wrong, and moral responsibility"},
+
+  {id:"Q16",dok:2,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"match",
+   stem:"Match each detail to the source it comes from:",
+   rows:[
+     {label:"Memory foam was developed to protect pilots and astronauts.",correct:"Source 2"},
+     {label:"Neural networks are loosely inspired by the human brain.",correct:"Source 1"},
+     {label:"The Apollo 11 mission landed on the Moon in 1969.",correct:"Source 2"},
+     {label:"Spam filters and voice assistants use forms of AI.",correct:"Source 1"}
+   ],
+   columns:["Source 1","Source 2"],
+   vocabTerm:"textual evidence — specific details from a text used to support an answer or claim"},
+
+  {id:"Q17",dok:2,domain:"w",domainLabel:"Writing",domainClass:"domain-w",type:"sr",
+   stem:"A student wants to add a <strong>transition sentence</strong> between the third and fourth paragraphs of Source 2 to connect the ideas. Which transition would work best?",
+   options:[
+     {text:"In addition, the Soviet Union launched several more satellites after Sputnik.",correct:false},
+     {text:"However, many of the technologies developed for space never left NASA.",correct:false},
+     {text:"The impact of this engineering work reached far beyond the rockets themselves.",correct:true},
+     {text:"In conclusion, space exploration is still very important today.",correct:false}
+   ],
+   vocabTerm:"transition — a word or sentence that connects ideas smoothly between paragraphs"},
+
+  {id:"Q18",dok:2,domain:"lang",domainLabel:"Language & Vocab",domainClass:"domain-lang",type:"sr",
+   stem:"Read this sentence from Source 2:<br><br><em>\"Each nation poured enormous resources into developing rockets, satellites, and spacecraft, driven partly by national pride and partly by the belief that whoever controlled space would gain a strategic advantage.\"</em><br><br>The word <strong>\"strategic\"</strong> most nearly means:",
+   options:[
+     {text:"Expensive and wasteful",correct:false},
+     {text:"Planned to gain an advantage or achieve a goal",correct:true},
+     {text:"Related to scientific research",correct:false},
+     {text:"Based on democratic values",correct:false}
+   ],
+   vocabTerm:"strategic — carefully planned to achieve a specific goal or advantage"},
+
+  {id:"Q19",dok:2,domain:"w",domainLabel:"Writing",domainClass:"domain-w",type:"sr",
+   stem:"Which organizational structure does the author of Source 2 <strong>primarily</strong> use?",
+   options:[
+     {text:"Problem and solution",correct:false},
+     {text:"Compare and contrast",correct:false},
+     {text:"Chronological order with supporting examples",correct:true},
+     {text:"Cause and effect only",correct:false}
+   ],
+   vocabTerm:"text structure — the way an author organizes information in a text"},
+
+  // ── DOK 3 ── 6 items ──────────────────────────────────────────────────
+  {id:"Q20",dok:3,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"ms",correctCount:2,
+   stem:"Select <strong>TWO</strong> statements that are supported by evidence in <strong>both</strong> sources.",
+   options:[
+     {text:"Technology developed to solve difficult problems can have unexpected benefits for everyday life.",correct:true},
+     {text:"Governments should stop funding AI research until its risks are better understood.",correct:false},
+     {text:"Progress in science and technology often raises new questions and challenges alongside its benefits.",correct:true},
+     {text:"Space exploration has completely solved the problem of clean drinking water.",correct:false},
+     {text:"AI and space technology are unrelated fields with nothing in common.",correct:false}
+   ],
+   vocabTerm:"inference — a conclusion drawn from evidence in a text, not directly stated"},
+
+  {id:"Q21",dok:3,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"ms",correctCount:2,
+   stem:"Select <strong>TWO</strong> ways the authors of Source 1 and Source 2 are <strong>similar</strong> in how they present information.",
+   options:[
+     {text:"Both authors use specific examples to support their central ideas.",correct:true},
+     {text:"Both authors argue that technology always creates more problems than it solves.",correct:false},
+     {text:"Both authors address potential drawbacks or challenges related to their topic.",correct:true},
+     {text:"Both authors write in chronological order from oldest to newest event.",correct:false},
+     {text:"Both authors focus only on American technology and inventions.",correct:false}
+   ],
+   vocabTerm:"author's craft — the choices a writer makes about structure, language, and evidence"},
+
+  {id:"Q22",dok:3,domain:"w",domainLabel:"Writing",domainClass:"domain-w",type:"dd",
+   stem:"Drag each element to the correct part of an <strong>argumentative essay structure</strong> for a prompt using both sources.",
+   slots:[
+     {label:"Introduction",correct:"Claim"},
+     {label:"Body Paragraph 1",correct:"Evidence from Source 1"},
+     {label:"Body Paragraph 2",correct:"Evidence from Source 2"},
+     {label:"Conclusion",correct:"Call to Action"}
+   ],
+   items:["Evidence from Source 1","Call to Action","Claim","Evidence from Source 2"],
+   vocabTerm:"argumentative structure — the organized arrangement of claim, evidence, and conclusion"},
+
+  {id:"Q23",dok:3,domain:"ri",domainLabel:"Reading Informational",domainClass:"domain-ri",type:"sr",
+   stem:"Based on both sources, what <strong>broader conclusion</strong> can a reader draw about the relationship between <strong>difficult challenges</strong> and <strong>technological progress</strong>?",
+   options:[
+     {text:"Difficult challenges slow down technological progress because they use too many resources.",correct:false},
+     {text:"Technological progress only happens when governments fund large competitions like the Space Race.",correct:false},
+     {text:"When humans face hard problems — whether in space or in computing — the solutions they develop often improve life in unexpected ways.",correct:true},
+     {text:"AI and space technology have made human workers unnecessary.",correct:false}
+   ],
+   vocabTerm:"synthesis — drawing a broader conclusion by combining ideas from more than one source"},
+
+  {id:"Q24",dok:3,domain:"w",domainLabel:"Writing",domainClass:"domain-w",type:"ms",correctCount:2,
+   stem:"A student is writing an argumentative essay with this claim:<br><br><em>\"Investing in science and technology, even when it is difficult and uncertain, leads to discoveries that benefit everyone.\"</em><br><br>Select <strong>TWO</strong> pieces of evidence from the sources that <strong>best</strong> support this claim.",
+   options:[
+     {text:"Water filtration technology created for space missions is now used in portable water purifiers on Earth. (Source 2)",correct:true},
+     {text:"The United States and Soviet Union competed during the Cold War. (Source 2)",correct:false},
+     {text:"AI systems used to diagnose diseases are related to the same deep learning technology that powers everyday tools like autocorrect. (Source 1)",correct:true},
+     {text:"Yuri Gagarin was the first human to orbit Earth. (Source 2)",correct:false},
+     {text:"AI can reflect the biases present in its training data. (Source 1)",correct:false}
+   ],
+   vocabTerm:"relevant evidence — details that directly and specifically support a claim"},
+
+  {id:"Q25",dok:3,domain:"lang",domainLabel:"Language & Vocab",domainClass:"domain-lang",type:"dd",
+   stem:"Drag each word to the correct definition based on how it is used in the passages.",
+   slots:[
+     {label:"A system learns patterns from large amounts of data",correct:"machine learning"},
+     {label:"Reaching the highest or final point",correct:"culminating"},
+     {label:"Unfair tendencies built into a system",correct:"biases"},
+     {label:"Carefully planned to gain an advantage",correct:"strategic"}
+   ],
+   items:["machine learning","culminating","biases","strategic"],
+   vocabTerm:"vocabulary in context — using surrounding words and sentences to figure out what a word means"}
+];
+
+// ── STATE ──────────────────────────────────────────────────────
+let studentName="", studentPeriod="";
+let answers={};
+let vocabFlags=new Set();
+let srSel={}, msSel={}, ddData={}, ddSel={}, matchSel={};
+let currentIdx=0;
+
+// ── START ──────────────────────────────────────────────────────
+function startSim(){
+  studentName=document.getElementById("student-name").value.trim();
+  studentPeriod=document.getElementById("student-period").value;
+  if(!studentName||!studentPeriod){alert("Please enter your name and select your class period.");return;}
+  showScreen("screen-sim");
+  renderQuestions();
+  showQuestion(0);
+}
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");}
+function setHeaderHeight(){const h=document.querySelector(".sim-header");if(h)document.documentElement.style.setProperty("--header-h",h.offsetHeight+"px");}
+window.addEventListener("load",setHeaderHeight);
+window.addEventListener("resize",setHeaderHeight);
+
+// ── RENDER ALL (hidden) ────────────────────────────────────────
+function renderQuestions(){
+  const c=document.getElementById("questions-container");
+  c.innerHTML="";
+  QUESTIONS.forEach((q,i)=>{
+    const b=document.createElement("div");
+    b.className="question-block";
+    b.id="block-"+q.id;
+    b.style.display="none";
+    let h=`<div class="q-meta">
+      <span class="q-num">Question ${i+1} of ${TOTAL_QUESTIONS}</span>
+      <span class="q-domain ${q.domainClass}">${q.domainLabel}</span>
+      <span class="q-dok">DOK ${q.dok}</span>
+    </div>
+    <div class="q-stem">${q.stem}</div>`;
+    if(q.type==="sr") h+=renderSR(q);
+    else if(q.type==="ms") h+=renderMS(q);
+    else if(q.type==="dd") h+=renderDD(q);
+    else if(q.type==="dropdown") h+=renderDropdown(q);
+    else if(q.type==="match") h+=renderMatch(q);
+    h+=`<div class="q-actions">
+      <button class="btn-vocab-flag" id="flag-${q.id}" onclick="toggleFlag('${q.id}')">🏳 Flag Vocabulary</button>
+    </div>`;
+    b.innerHTML=h;
+    c.appendChild(b);
+  });
+  QUESTIONS.filter(q=>q.type==="dd").forEach(q=>initDD(q));
+}
+
+// ── SHOW ONE QUESTION ──────────────────────────────────────────
+function showQuestion(idx){
+  QUESTIONS.forEach((q,i)=>{
+    document.getElementById("block-"+q.id).style.display=(i===idx)?"block":"none";
+  });
+  currentIdx=idx;
+  const q=QUESTIONS[idx];
+  const isAnswered=!!answers[q.id];
+  const isLast=(idx===TOTAL_QUESTIONS-1);
+
+  document.getElementById("nav-current").textContent=idx+1;
+  document.getElementById("btn-back").disabled=(idx===0);
+
+  const nextBtn=document.getElementById("btn-next");
+  const finishBtn=document.getElementById("btn-finish");
+  if(isLast){
+    nextBtn.style.display="none";
+    finishBtn.style.display="";
+    finishBtn.disabled=!isAnswered;
+  } else {
+    nextBtn.style.display="";
+    finishBtn.style.display="none";
+    nextBtn.disabled=!isAnswered;
+  }
+
+  const done=Object.keys(answers).length;
+  document.getElementById("progress-bar").style.width=(done/TOTAL_QUESTIONS*100)+"%";
+  document.getElementById("progress-label").textContent=`${done} / ${TOTAL_QUESTIONS}`;
+  document.getElementById("questions-container").scrollTop=0;
+}
+
+function goNext(){if(currentIdx<TOTAL_QUESTIONS-1) showQuestion(currentIdx+1);}
+function goBack(){if(currentIdx>0) showQuestion(currentIdx-1);}
+
+// ── RENDERERS ─────────────────────────────────────────────────
+function renderSR(q){
+  let h=`<ul class="options-list">`;
+  q.options.forEach((o,i)=>{
+    const l=["A","B","C","D"][i];
+    h+=`<li><button class="option-btn" id="opt-${q.id}-${i}" onclick="selectSR('${q.id}',${i})"><span class="opt-letter">${l}</span>${o.text}</button></li>`;
+  });
+  return h+`</ul>`;
+}
+function renderMS(q){
+  let h=`<div class="multiselect-note">📌 Select ${q.correctCount} answers</div>`;
+  q.options.forEach((o,i)=>{
+    h+=`<button class="option-check" id="opt-${q.id}-${i}" onclick="toggleMS('${q.id}',${i})"><span class="check-box"></span>${o.text}</button>`;
+  });
+  return h;
+}
+function renderDropdown(q){
+  let opts=`<option value="">— select —</option>`;
+  q.options.forEach((o,i)=>{opts+=`<option value="${i}">${o.text}</option>`;});
+  return `<p class="inline-sentence">${q.prefix} <span class="inline-dropdown"><select id="dd-sel-${q.id}" onchange="selectDropdown('${q.id}')">${opts}</select></span></p>`;
+}
+function renderMatch(q){
+  let h=`<div style="overflow-x:auto"><table class="match-table"><thead><tr><th>Detail</th>`;
+  q.columns.forEach(col=>{h+=`<th>${col}</th>`;});
+  h+=`</tr></thead><tbody>`;
+  q.rows.forEach((row,ri)=>{
+    h+=`<tr id="match-row-${q.id}-${ri}"><td>${row.label}</td>`;
+    q.columns.forEach((col,ci)=>{
+      h+=`<td><input type="radio" class="match-radio" name="match-${q.id}-${ri}" value="${ci}" onchange="selectMatch('${q.id}',${ri},${ci})"></td>`;
+    });
+    h+=`</tr>`;
+  });
+  return h+`</tbody></table></div>`;
+}
+function renderDD(q){
+  ddData[q.id]={placed:{}};
+  const items=q.items.map(item=>`<div class="drag-item" draggable="true" id="drag-${q.id}-${item.replace(/[\s/]/g,'-')}" ondragstart="onDragStart(event,'${q.id}','${item}')">${item}</div>`).join("");
+  const slots=q.slots.map((s,i)=>`<div class="drop-slot-wrap"><span class="slot-label">${s.label}</span><div class="drop-slot" id="slot-${q.id}-${i}" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="onDrop(event,'${q.id}',${i})">Drop here</div></div>`).join("");
+  return `<p style="font-size:.78rem;color:var(--gray-400);font-style:italic;margin-bottom:10px">Drag each item from the bank to the correct slot.</p><div class="drag-bank" id="bank-${q.id}">${items}</div><div class="drop-slots-grid">${slots}</div>`;
+}
+function initDD(q){}
+
+// ── INTERACTION ────────────────────────────────────────────────
+function selectSR(qid,idx){
+  srSel[qid]=idx;
+  const q=QUESTIONS.find(x=>x.id===qid);
+  q.options.forEach((_,i)=>document.getElementById(`opt-${qid}-${i}`).classList.toggle("selected",i===idx));
+  markAnswered(qid);
+}
+function toggleMS(qid,idx){
+  if(!msSel[qid]) msSel[qid]=new Set();
+  const s=msSel[qid];
+  const btn=document.getElementById(`opt-${qid}-${idx}`);
+  const q=QUESTIONS.find(x=>x.id===qid);
+  if(s.has(idx)){s.delete(idx);btn.classList.remove("checked");btn.querySelector(".check-box").textContent="";}
+  else{
+    if(s.size>=q.correctCount){
+      const oldest=[...s][0];s.delete(oldest);
+      document.getElementById(`opt-${qid}-${oldest}`).classList.remove("checked");
+      document.getElementById(`opt-${qid}-${oldest}`).querySelector(".check-box").textContent="";
+    }
+    s.add(idx);btn.classList.add("checked");btn.querySelector(".check-box").textContent="✓";
+  }
+  if(s.size===q.correctCount) markAnswered(qid);
+  else unmarkAnswered(qid);
+}
+function selectDropdown(qid){
+  const val=document.getElementById(`dd-sel-${qid}`).value;
+  if(val==="") return;
+  ddSel[qid]=parseInt(val);
+  markAnswered(qid);
+}
+function selectMatch(qid,rowIdx,colIdx){
+  if(!matchSel[qid]) matchSel[qid]={};
+  matchSel[qid][rowIdx]=colIdx;
+  document.getElementById(`match-row-${qid}-${rowIdx}`).classList.add("row-answered");
+  const q=QUESTIONS.find(x=>x.id===qid);
+  if(Object.keys(matchSel[qid]).length===q.rows.length) markAnswered(qid);
+}
+let currentDrag=null;
+function onDragStart(e,qid,item){currentDrag={qid,item};}
+function onDrop(e,qid,slotIdx){
+  e.preventDefault();
+  document.getElementById(`slot-${qid}-${slotIdx}`).classList.remove("drag-over");
+  if(!currentDrag||currentDrag.qid!==qid) return;
+  const item=currentDrag.item;
+  const prev=Object.entries(ddData[qid].placed).find(([s,v])=>v===item);
+  if(prev){delete ddData[qid].placed[prev[0]];const ps=document.getElementById(`slot-${qid}-${prev[0]}`);ps.textContent="Drop here";ps.classList.remove("filled");}
+  if(ddData[qid].placed[slotIdx]){
+    const old=ddData[qid].placed[slotIdx];
+    document.getElementById(`drag-${qid}-${old.replace(/[\s/]/g,'-')}`).classList.remove("placed");
+  }
+  ddData[qid].placed[slotIdx]=item;
+  const slot=document.getElementById(`slot-${qid}-${slotIdx}`);
+  slot.textContent=item;slot.classList.add("filled");
+  document.getElementById(`drag-${qid}-${item.replace(/[\s/]/g,'-')}`).classList.add("placed");
+  const q=QUESTIONS.find(x=>x.id===qid);
+  if(Object.keys(ddData[qid].placed).length===q.slots.length) markAnswered(qid);
+}
+
+function markAnswered(qid){
+  answers[qid]=true;
+  showQuestion(currentIdx);
+}
+function unmarkAnswered(qid){
+  delete answers[qid];
+  showQuestion(currentIdx);
+}
+function toggleFlag(qid){
+  const btn=document.getElementById(`flag-${qid}`);
+  if(vocabFlags.has(qid)){vocabFlags.delete(qid);btn.innerHTML="🏳 Flag Vocabulary";btn.classList.remove("flagged");}
+  else{vocabFlags.add(qid);btn.innerHTML="🚩 Vocabulary Flagged";btn.classList.add("flagged");}
+}
+
+// ── SCORE ──────────────────────────────────────────────────────
+function scoreQuestion(q){
+  if(q.type==="sr") return srSel[q.id]!==undefined && q.options[srSel[q.id]].correct;
+  if(q.type==="ms"){
+    const s=msSel[q.id]||new Set();
+    const correct=new Set(q.options.map((o,i)=>o.correct?i:-1).filter(i=>i>=0));
+    return s.size===correct.size&&[...s].every(i=>correct.has(i));
+  }
+  if(q.type==="dropdown") return ddSel[q.id]!==undefined && q.options[ddSel[q.id]].correct;
+  if(q.type==="match"){
+    const sel=matchSel[q.id]||{};
+    return q.rows.every((row,ri)=>{
+      const colIdx=sel[ri];
+      return colIdx!==undefined && q.columns[colIdx]===row.correct;
+    });
+  }
+  if(q.type==="dd"){
+    const p=ddData[q.id]?.placed||{};
+    return q.slots.every((s,i)=>p[i]===s.correct);
+  }
+  return false;
+}
+
+// ── FINISH ─────────────────────────────────────────────────────
+function finishSim(){
+  let totalScore=0;
+  const domains={
+    readingInfo:{correct:0,possible:0},
+    writing:{correct:0,possible:0},
+    languageVocab:{correct:0,possible:0}
+  };
+  const dok={dok1:{correct:0,possible:0},dok2:{correct:0,possible:0},dok3:{correct:0,possible:0}};
+  const correctItems=[],incorrectItems=[];
+
+  QUESTIONS.forEach(q=>{
+    const domKey={ri:"readingInfo",w:"writing",lang:"languageVocab"}[q.domain];
+    const dokKey=`dok${q.dok}`;
+    domains[domKey].possible++;dok[dokKey].possible++;
+    if(scoreQuestion(q)){totalScore++;domains[domKey].correct++;dok[dokKey].correct++;correctItems.push(q.id);}
+    else incorrectItems.push(q.id);
+  });
+
+  const pct=Math.round(totalScore/TOTAL_QUESTIONS*100);
+  let level="Beginning";
+  if(pct>=90)level="Distinguished";else if(pct>=70)level="Proficient";else if(pct>=50)level="Developing";
+
+  document.getElementById("result-name").textContent=studentName+" · Period "+studentPeriod;
+  document.getElementById("result-pct").textContent=pct+"%";
+  document.getElementById("result-raw").textContent=`${totalScore} / ${TOTAL_QUESTIONS}`;
+  const bc={Distinguished:"badge-distinguished",Proficient:"badge-proficient",Developing:"badge-developing",Beginning:"badge-beginning"}[level];
+  document.getElementById("result-badge").innerHTML=`<span class="achievement-badge ${bc}">${level} Learner</span>`;
+
+  const domLabels={readingInfo:"Reading Informational",writing:"Writing",languageVocab:"Language & Vocab"};
+  const domColors={readingInfo:"#0891b2",writing:"#d97706",languageVocab:"#059669"};
+  let dg="";
+  Object.entries(domains).forEach(([k,v])=>{
+    const p=v.possible>0?Math.round(v.correct/v.possible*100):0;
+    dg+=`<div class="domain-card"><div class="d-label">${domLabels[k]}</div><div class="domain-bar-outer"><div class="domain-bar-inner" style="width:${p}%;background:${domColors[k]}"></div></div><div class="d-score">${v.correct} / ${v.possible} (${p}%)</div></div>`;
+  });
+  document.getElementById("domain-grid").innerHTML=dg;
+
+  let dh="";
+  Object.entries(dok).forEach(([k,v])=>{
+    const p=v.possible>0?Math.round(v.correct/v.possible*100):0;
+    dh+=`<div class="dok-row"><span class="dok-label">${k.replace("dok","DOK ")}</span><div class="dok-bar-outer"><div class="dok-bar-inner" style="width:${p}%"></div></div><span class="dok-score">${v.correct}/${v.possible}</span></div>`;
+  });
+  document.getElementById("dok-breakdown").innerHTML=dh;
+
+  const fl=document.getElementById("vocab-flag-summary");
+  if(vocabFlags.size===0){fl.innerHTML=`<div class="no-flags">No vocabulary flags raised.</div>`;}
+  else{
+    fl.innerHTML=`<div class="vocab-flags-list">`+[...vocabFlags].map(id=>{
+      const q=QUESTIONS.find(x=>x.id===id);
+      return `<div class="vocab-flag-chip">Q${QUESTIONS.indexOf(q)+1} — ${q.vocabTerm.split("—")[0].trim()}</div>`;
+    }).join("")+`</div>`;
+  }
+
+  showScreen("screen-results");
+  window.scrollTo(0,0);
+
+  const payload={
+    subject:"Grade6ELA-SciTech",
+    studentName,period:studentPeriod,totalScore,totalPossible:TOTAL_QUESTIONS,achievementLevel:level,
+    domainBreakdown:domains,dokBreakdown:dok,correctItems,incorrectItems,vocabFlags:[...vocabFlags]
+  };
+
+  const msgEl=document.getElementById("submit-msg");
+  msgEl.className="submit-msg sending";
+  msgEl.textContent="Sending results to your teacher…";
+
+  const form=document.createElement("form");
+  form.method="POST";form.action=SCRIPT_URL;form.target="submit-iframe";form.style.display="none";
+  const inp=document.createElement("input");
+  inp.type="hidden";inp.name="payload";inp.value=JSON.stringify(payload);
+  form.appendChild(inp);document.body.appendChild(form);
+  const iframe=document.createElement("iframe");
+  iframe.name="submit-iframe";iframe.style.display="none";
+  document.body.appendChild(iframe);
+  iframe.onload=()=>{msgEl.className="submit-msg success";msgEl.textContent="✓ Results submitted! Your teacher has received your score.";};
+  setTimeout(()=>{if(msgEl.className.includes("sending")){msgEl.className="submit-msg error";msgEl.textContent="⚠ Could not submit automatically. Please show your teacher this screen.";}},8000);
+
+  fetch(SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+    .then(()=>{msgEl.className="submit-msg success";msgEl.textContent="✓ Results submitted! Your teacher has received your score.";})
+    .catch(()=>{});
+
+  form.submit();
+}
+</script>
+</body>
+</html>
